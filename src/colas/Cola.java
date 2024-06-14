@@ -14,7 +14,7 @@ package colas;
  */
 public class Cola<TipoDeDato> implements InterfazCola<TipoDeDato> {
 
-    private NodoCola<TipoDeDato> iniCola;
+    NodoCola<TipoDeDato> iniCola;
     private NodoCola<TipoDeDato> finCola;
     private int tamanoCola;
 
