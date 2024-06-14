@@ -22,76 +22,59 @@ public class ColaDePrioridad<TipoDeDato> {
 
 	public void encolar(TipoDeDato nuevoDato, int prioridad) {
 		switch (prioridad) {
-			case 1:
+			case ALTA:
 				prioridadAltas.encolar(nuevoDato);
 				break;
-			case 2:
+			case MEDIA:
 				prioridadMedias.encolar(nuevoDato);
 				break;
-			case 3:
+			case BAJA:
 				prioridadBajas.encolar(nuevoDato);
 				break;
+			default:
+				throw new IllegalArgumentException("Prioridad no válida: " + prioridad);
 		}
 	}
 
 	public TipoDeDato desencolar() {
 		TipoDeDato clienteAtendido = null;
 
-		// Atender clientes con prioridad alta
-		if (contadorAltas < 3 && !prioridadAltas.esVacia()) {
-			clienteAtendido = prioridadAltas.desencolar();
-			contadorAltas++;
-		} else if (contadorMedias < 2 && !prioridadMedias.esVacia()) {
-			clienteAtendido = prioridadMedias.desencolar();
-			contadorMedias++;
-		} else if (contadorBajas < 1 && !prioridadBajas.esVacia()) {
+		// Ciclo para desencolar siguiendo la lógica 3-2-1
+		for (int i = 0; i < 3; i++) {
+			if (!prioridadAltas.esVacia()) {
+				clienteAtendido = prioridadAltas.desencolar();
+				contadorAltas++;
+				System.out.println("Atendiendo cliente de alta prioridad: " + clienteAtendido);
+			} else {
+				break;
+			}
+		}
+
+		for (int i = 0; i < 2; i++) {
+			if (!prioridadMedias.esVacia()) {
+				clienteAtendido = prioridadMedias.desencolar();
+				contadorMedias++;
+				System.out.println("Atendiendo cliente de media prioridad: " + clienteAtendido);
+			} else {
+				break;
+			}
+		}
+
+		if (!prioridadBajas.esVacia()) {
 			clienteAtendido = prioridadBajas.desencolar();
 			contadorBajas++;
-		} else {
-			// Reiniciar los contadores y verificar si hay clientes en alguna de las filas
-			contadorAltas = 0;
-			contadorMedias = 0;
-			contadorBajas = 0;
+			System.out.println("Atendiendo cliente de baja prioridad: " + clienteAtendido);
+		}
 
-			// Verificar si hay clientes en alguna de las filas
-			if (!prioridadAltas.esVacia() || !prioridadMedias.esVacia() || !prioridadBajas.esVacia()) {
-				// Verificar si hay clientes en la prioridad alta
-				if (!prioridadAltas.esVacia()) {
-					clienteAtendido = prioridadAltas.desencolar();
-					contadorAltas++;
-				}
-				// Verificar si hay clientes en la prioridad media
-				else if (!prioridadMedias.esVacia()) {
-					clienteAtendido = prioridadMedias.desencolar();
-					contadorMedias++;
-				}
-				// Verificar si hay clientes en la prioridad baja
-				else if (!prioridadBajas.esVacia()) {
-					clienteAtendido = prioridadBajas.desencolar();
-					contadorBajas++;
-				}
-			} else {
-				System.out.println("No hay clientes por atender.");
-			}
+		// Verificar si todas las colas están vacías
+		if (prioridadAltas.esVacia() && prioridadMedias.esVacia() && prioridadBajas.esVacia()) {
+			System.out.println("No hay clientes por atender.");
+			return null;
 		}
 
 		return clienteAtendido;
 	}
 
-
-//En esta version el metodo desencolar() se modifico directamente para manejar el casi en el que
-//no hay clientes por atender y mostrar un mensaje ("No hay clientes por atender") al usuario dado el caso (tal como se solicita en el documento examen).
-//Solo por eso el metodo desencolarComoCadena() no se implemento en esta version
-/*
-	public String desencolarComoCadena() {
-		TipoDeDato clienteAtendido = desencolar();
-		if (clienteAtendido != null) {
-			return clienteAtendido.toString();
-		} else {
-			return null;
-		}
-	}
-*/
 	public void mostrarEstadoColas() {
 		System.out.println("Estado de las colas:");
 		mostrarCola(prioridadAltas, "Prioridad Alta");
