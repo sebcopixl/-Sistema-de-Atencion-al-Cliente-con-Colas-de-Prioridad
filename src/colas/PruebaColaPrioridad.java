@@ -9,12 +9,15 @@ public class PruebaColaPrioridad {
         int cantidadPrioridadAlta, cantidadPrioridadMedia, cantidadPrioridadBaja;
 
         System.out.println("Bienvenido al Sistema de Atención al Cliente");
+
         System.out.println("Ingrese la cantidad de clientes en la prioridad alta:");
-        cantidadPrioridadAlta = scanner.nextInt();
+        cantidadPrioridadAlta = obtenerEntero(scanner);
+
         System.out.println("Ingrese la cantidad de clientes en la prioridad media:");
-        cantidadPrioridadMedia = scanner.nextInt();
+        cantidadPrioridadMedia = obtenerEntero(scanner);
+
         System.out.println("Ingrese la cantidad de clientes en la prioridad baja:");
-        cantidadPrioridadBaja = scanner.nextInt();
+        cantidadPrioridadBaja = obtenerEntero(scanner);
 
         ColaDePrioridad<String> cola = generarColaClientes(cantidadPrioridadAlta, cantidadPrioridadMedia, cantidadPrioridadBaja);
 
@@ -26,7 +29,7 @@ public class PruebaColaPrioridad {
             System.out.println("2. Mostrar cola de espera");
             System.out.println("3. Salir");
             System.out.print("Seleccione una opción: ");
-            opcion = scanner.nextInt();
+            opcion = obtenerEntero(scanner);
 
             switch (opcion) {
                 case 1:
@@ -51,6 +54,23 @@ public class PruebaColaPrioridad {
         } while (opcion != 3);
 
         scanner.close();
+    }
+
+    private static int obtenerEntero(Scanner scanner) {
+        int numero = 0;
+        boolean entradaInvalida = true;
+
+        while (entradaInvalida) {
+            if (scanner.hasNextInt()) {
+                numero = scanner.nextInt();
+                entradaInvalida = false;
+            } else {
+                System.out.println("Error: Por favor, ingrese un valor numérico válido.");
+                scanner.next(); // Limpiar el buffer del scanner
+            }
+        }
+
+        return numero;
     }
 
     private static ColaDePrioridad<String> generarColaClientes(int cantidadPrioridadAlta, int cantidadPrioridadMedia, int cantidadPrioridadBaja) {

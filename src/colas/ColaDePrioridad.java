@@ -79,13 +79,10 @@ public class ColaDePrioridad<TipoDeDato> {
 	}
 
 
-
-
-
-
-
-
-
+//En esta version el metodo desencolar() se modifico directamente para manejar el casi en el que
+//no hay clientes por atender y mostrar un mensaje ("No hay clientes por atender") al usuario dado el caso (tal como se solicita en el documento examen).
+//Solo por eso el metodo desencolarComoCadena() no se implemento en esta version
+/*
 	public String desencolarComoCadena() {
 		TipoDeDato clienteAtendido = desencolar();
 		if (clienteAtendido != null) {
@@ -94,7 +91,7 @@ public class ColaDePrioridad<TipoDeDato> {
 			return null;
 		}
 	}
-
+*/
 	public void mostrarEstadoColas() {
 		System.out.println("Estado de las colas:");
 		mostrarCola(prioridadAltas, "Prioridad Alta");
