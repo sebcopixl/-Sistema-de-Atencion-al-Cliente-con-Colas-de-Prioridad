@@ -36,3 +36,7 @@ El método `desencolarComoCadena()` no se utiliza ya que la funcionalidad de con
 ## Estado del examen
 
 El examen ha sido completado y se encuentra listo para su revisión en la rama `seb_exam1`.
+
+---
+
+Este README ha sido generado utilizando GPT para proporcionar una descripción clara y concisa de los archivos y modificaciones realizadas. GPT también se ha utilizado para manejar casos especiales en el uso del programa, como entradas inválidas y otros escenarios que requieren validación.
