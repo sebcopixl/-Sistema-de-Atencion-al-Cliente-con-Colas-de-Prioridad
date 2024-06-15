@@ -38,12 +38,14 @@ public class ColaDePrioridad<TipoDeDato> {
 
 	public TipoDeDato desencolar() {
 		TipoDeDato clienteAtendido = null;
+		boolean atendido = false;
 
 		// Ciclo para desencolar siguiendo la lógica 3-2-1
 		for (int i = 0; i < 3; i++) {
 			if (!prioridadAltas.esVacia()) {
 				clienteAtendido = prioridadAltas.desencolar();
 				contadorAltas++;
+				atendido = true;
 				System.out.println("Atendiendo cliente de alta prioridad: " + clienteAtendido);
 			} else {
 				break;
@@ -54,6 +56,7 @@ public class ColaDePrioridad<TipoDeDato> {
 			if (!prioridadMedias.esVacia()) {
 				clienteAtendido = prioridadMedias.desencolar();
 				contadorMedias++;
+				atendido = true;
 				System.out.println("Atendiendo cliente de media prioridad: " + clienteAtendido);
 			} else {
 				break;
@@ -63,6 +66,7 @@ public class ColaDePrioridad<TipoDeDato> {
 		if (!prioridadBajas.esVacia()) {
 			clienteAtendido = prioridadBajas.desencolar();
 			contadorBajas++;
+			atendido = true;
 			System.out.println("Atendiendo cliente de baja prioridad: " + clienteAtendido);
 		}
 
@@ -70,6 +74,13 @@ public class ColaDePrioridad<TipoDeDato> {
 		if (prioridadAltas.esVacia() && prioridadMedias.esVacia() && prioridadBajas.esVacia()) {
 			System.out.println("No hay clientes por atender.");
 			return null;
+		}
+
+		// Verificar si no se atendió a ningún cliente y resetear contadores
+		if (!atendido) {
+			contadorAltas = 0;
+			contadorMedias = 0;
+			contadorBajas = 0;
 		}
 
 		return clienteAtendido;

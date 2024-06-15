@@ -1,6 +1,5 @@
 package colas;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PruebaColaPrioridad {
@@ -28,12 +27,12 @@ public class PruebaColaPrioridad {
             System.out.print("Seleccione una opción: ");
 
             while (true) {
-                try {
-                    opcion = scanner.nextInt();
+                String entrada = scanner.nextLine();
+                if (esNumero(entrada)) {
+                    opcion = Integer.parseInt(entrada);
                     break;
-                } catch (InputMismatchException e) {
+                } else {
                     System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                    scanner.next(); // Clear the invalid input
                 }
             }
 
@@ -68,13 +67,13 @@ public class PruebaColaPrioridad {
     private static int obtenerCantidadClientes(Scanner scanner, String prioridad) {
         int cantidad;
         while (true) {
-            try {
-                System.out.println("Ingrese la cantidad de clientes en la " + prioridad + ":");
-                cantidad = scanner.nextInt();
+            System.out.println("Ingrese la cantidad de clientes en la " + prioridad + ":");
+            String entrada = scanner.nextLine();
+            if (esNumero(entrada)) {
+                cantidad = Integer.parseInt(entrada);
                 break;
-            } catch (InputMismatchException e) {
+            } else {
                 System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                scanner.next(); // Clear the invalid input
             }
         }
         return cantidad;
@@ -97,37 +96,36 @@ public class PruebaColaPrioridad {
     private static void agregarClientes(Scanner scanner, ColaDePrioridad<String> cola) {
         int prioridad;
         while (true) {
-            try {
-                System.out.println("¿A qué cola desea agregar clientes?");
-                System.out.println("1. Prioridad Alta");
-                System.out.println("2. Prioridad Media");
-                System.out.println("3. Prioridad Baja");
-                System.out.print("Seleccione una opción: ");
-                prioridad = scanner.nextInt();
-                if (prioridad < 1 || prioridad > 3) {
-                    System.out.println("Opción no válida. Intente de nuevo.");
-                } else {
+            System.out.println("¿A qué cola desea agregar clientes?");
+            System.out.println("1. Prioridad Alta");
+            System.out.println("2. Prioridad Media");
+            System.out.println("3. Prioridad Baja");
+            System.out.print("Seleccione una opción: ");
+            String entrada = scanner.nextLine();
+            if (esNumero(entrada)) {
+                prioridad = Integer.parseInt(entrada);
+                if (prioridad >= 1 && prioridad <= 3) {
                     break;
+                } else {
+                    System.out.println("Opción no válida. Intente de nuevo.");
                 }
-            } catch (InputMismatchException e) {
+            } else {
                 System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                scanner.next(); // Clear the invalid input
             }
         }
 
         int cantidadClientes = 0;
         while (true) {
-            try {
-                System.out.println("Ingrese la cantidad de clientes a agregar:");
-                cantidadClientes = scanner.nextInt();
+            System.out.println("Ingrese la cantidad de clientes a agregar:");
+            String entrada = scanner.nextLine();
+            if (esNumero(entrada)) {
+                cantidadClientes = Integer.parseInt(entrada);
                 break;
-            } catch (InputMismatchException e) {
+            } else {
                 System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                scanner.next(); // Clear the invalid input
             }
         }
 
-        scanner.nextLine(); // Clear the buffer
         for (int i = 0; i < cantidadClientes; i++) {
             System.out.print("Ingrese el nombre del cliente " + (i + 1) + ": ");
             String nombreCliente = scanner.nextLine();
@@ -142,6 +140,15 @@ public class PruebaColaPrioridad {
                     cola.encolar(nombreCliente, ColaDePrioridad.BAJA);
                     break;
             }
+        }
+    }
+
+    private static boolean esNumero(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 }
