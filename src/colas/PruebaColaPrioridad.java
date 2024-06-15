@@ -6,7 +6,7 @@ public class PruebaColaPrioridad {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int cantidadPrioridadAlta = 0, cantidadPrioridadMedia = 0, cantidadPrioridadBaja = 0;
+        int cantidadPrioridadAlta, cantidadPrioridadMedia, cantidadPrioridadBaja;
 
         System.out.println("Bienvenido al Sistema de Atención al Cliente");
 
@@ -14,7 +14,7 @@ public class PruebaColaPrioridad {
         cantidadPrioridadMedia = obtenerCantidadClientes(scanner, "prioridad media");
         cantidadPrioridadBaja = obtenerCantidadClientes(scanner, "prioridad baja");
 
-        ColaDePrioridad<String> cola = generarColaClientes(cantidadPrioridadAlta, cantidadPrioridadMedia, cantidadPrioridadBaja);
+        ColaDePrioridad<Cliente> cola = generarColaClientes(cantidadPrioridadAlta, cantidadPrioridadMedia, cantidadPrioridadBaja);
 
         int opcion;
 
@@ -26,19 +26,11 @@ public class PruebaColaPrioridad {
             System.out.println("4. Salir");
             System.out.print("Seleccione una opción: ");
 
-            while (true) {
-                String entrada = scanner.nextLine();
-                if (esNumero(entrada)) {
-                    opcion = Integer.parseInt(entrada);
-                    break;
-                } else {
-                    System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                }
-            }
+            opcion = scanner.nextInt();
 
             switch (opcion) {
                 case 1:
-                    String cliente = cola.desencolar();
+                    Cliente cliente = cola.desencolar();
                     if (cliente != null) {
                         System.out.println("Atendiendo a " + cliente);
                     } else {
@@ -68,87 +60,93 @@ public class PruebaColaPrioridad {
         int cantidad;
         while (true) {
             System.out.println("Ingrese la cantidad de clientes en la " + prioridad + ":");
-            String entrada = scanner.nextLine();
-            if (esNumero(entrada)) {
-                cantidad = Integer.parseInt(entrada);
+            if (scanner.hasNextInt()) {
+                cantidad = scanner.nextInt();
                 break;
             } else {
                 System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                scanner.next(); // Clear the invalid input
             }
         }
         return cantidad;
     }
-
-    private static ColaDePrioridad<String> generarColaClientes(int cantidadPrioridadAlta, int cantidadPrioridadMedia, int cantidadPrioridadBaja) {
-        ColaDePrioridad<String> cola = new ColaDePrioridad<>();
+    //ColaDePrioridad<Cliente> se encarga de generar la cola de prioridad de clientes segun la cantidad de clientes en cada nivel de prioridad ingresada, esto con el fin de probar el programa
+    private static ColaDePrioridad<Cliente> generarColaClientes(int cantidadPrioridadAlta, int cantidadPrioridadMedia, int cantidadPrioridadBaja) {
+        ColaDePrioridad<Cliente> cola = new ColaDePrioridad<>();
         for (int i = 0; i < cantidadPrioridadAlta; i++) {
-            cola.encolar("A" + (i + 1), ColaDePrioridad.ALTA);
+            cola.encolar(new Cliente("A", i + 1));
         }
         for (int i = 0; i < cantidadPrioridadMedia; i++) {
-            cola.encolar("M" + (i + 1), ColaDePrioridad.MEDIA);
+            cola.encolar(new Cliente("M", i + 1));
         }
         for (int i = 0; i < cantidadPrioridadBaja; i++) {
-            cola.encolar("B" + (i + 1), ColaDePrioridad.BAJA);
+            cola.encolar(new Cliente("B", i + 1));
         }
         return cola;
     }
-
-    private static void agregarClientes(Scanner scanner, ColaDePrioridad<String> cola) {
+//Segun el documento del examen se solicita lo siguiente:
+//llegadaCliente(nombre, nivelPrioridad): A ̃nade un nuevo cliente a la cola de prioridad. El cliente se anade a la cola de prioridad correspondiente segun su nivel de prioridad
+//en este caso le llame agregarClientes(Scanner scanner, ColaDePrioridad<Cliente> cola) y se encarga de agregar clientes a la cola de prioridad segun su nivel de prioridad
+    private static void agregarClientes(Scanner scanner, ColaDePrioridad<Cliente> cola) {
         int prioridad;
+        //En este while se encarga de validar que la prioridad ingresada sea valida
         while (true) {
             System.out.println("¿A qué cola desea agregar clientes?");
             System.out.println("1. Prioridad Alta");
             System.out.println("2. Prioridad Media");
             System.out.println("3. Prioridad Baja");
             System.out.print("Seleccione una opción: ");
-            String entrada = scanner.nextLine();
-            if (esNumero(entrada)) {
-                prioridad = Integer.parseInt(entrada);
-                if (prioridad >= 1 && prioridad <= 3) {
-                    break;
-                } else {
+            if (scanner.hasNextInt()) {
+                prioridad = scanner.nextInt();
+                if (prioridad < 1 || prioridad > 3) {
                     System.out.println("Opción no válida. Intente de nuevo.");
+                } else {
+                    break;
                 }
             } else {
                 System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                scanner.next(); // esta parte se encarga de limpiar el buffer de entradas invalidas
             }
         }
-
-        int cantidadClientes = 0;
+        //el cantidadClientes se encarga de almacenar la cantidad de clientes a agregar a la cola de prioridad
+        int cantidadClientes;
         while (true) {
             System.out.println("Ingrese la cantidad de clientes a agregar:");
-            String entrada = scanner.nextLine();
-            if (esNumero(entrada)) {
-                cantidadClientes = Integer.parseInt(entrada);
+            if (scanner.hasNextInt()) {
+                cantidadClientes = scanner.nextInt();
                 break;
             } else {
                 System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                scanner.next(); // Aca limpiamos la entrada invalida de la cantidad de clientes
             }
         }
 
+        scanner.nextLine(); // Aca limpiamos el buffer de la entrada de la cantidad de clientes para poder leer los apellidos
         for (int i = 0; i < cantidadClientes; i++) {
-            System.out.print("Ingrese el nombre del cliente " + (i + 1) + ": ");
-            String nombreCliente = scanner.nextLine();
+            int apellido;
+            while (true) {
+                System.out.print("Ingrese el apellido del cliente " + (i + 1) + ": ");
+                if (scanner.hasNextInt()) {
+                    apellido = scanner.nextInt();
+                    scanner.nextLine(); // Acá limpiamos el buffer de la entrada del apellido para poder leer la siguiente prioridad
+                    break;
+                } else {
+                    System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                    scanner.next(); // Aca limpiamos la entrada invalida del apellido
+                }
+            }
+            //el switch se encarga de agregar el cliente a la cola de prioridad correspondiente segun su nivel de prioridad
             switch (prioridad) {
                 case 1:
-                    cola.encolar(nombreCliente, ColaDePrioridad.ALTA);
+                    cola.encolar(new Cliente("A", apellido));
                     break;
                 case 2:
-                    cola.encolar(nombreCliente, ColaDePrioridad.MEDIA);
+                    cola.encolar(new Cliente("M", apellido));
                     break;
                 case 3:
-                    cola.encolar(nombreCliente, ColaDePrioridad.BAJA);
+                    cola.encolar(new Cliente("B", apellido));
                     break;
             }
-        }
-    }
-
-    private static boolean esNumero(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
         }
     }
 }
