@@ -40,3 +40,4 @@ El examen ha sido completado y se encuentra listo para su revisión en la rama `
 ---
 
 Este README ha sido generado utilizando GPT para proporcionar una descripción clara y concisa de los archivos y modificaciones realizadas. GPT también se ha utilizado para manejar casos especiales en el uso del programa, como entradas inválidas y otros escenarios que requieren validación.
+El documento que hay que hacer correr para ejecutar el programa es: `PruebaColaPrioridad.java`.
